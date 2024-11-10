@@ -1,6 +1,11 @@
 {
   "name": "cnc-grid",
-  "version": "1.0.0",
+  "version": "1.0.2",
+  "homepage": "https://cnc-ui.com/cnc-grid",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/code-n-code-it-solutions/cnc-grid.git"
+  },
   "main": "dist/index.js",
   "types": "dist/types/index.d.ts",
   "files": [
@@ -14,7 +19,14 @@
     "cnc",
     "grid"
   ],
-  "author": "Code N Code IT Solutions",
+  "author": {
+    "email": "suhaibzia786@gmail.com",
+    "name": "Syed Suhaib Zia",
+    "url": "https://suhaibzia.com",
+    "organization": true,
+    "organizationName": "Code N Code IT Solutions",
+    "organizationUrl": "https://codencode.ae"
+  },
   "license": "ISC",
   "description": "A simple grid component",
   "dependencies": {

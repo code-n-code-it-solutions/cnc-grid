@@ -149,51 +149,43 @@ const GridContent: React.FC<GridProps> = ({
                     </div>
                 </div>
 
-                {loading ? (
-                    <div className="flex justify-center items-center py-10">
-                        <span>Loading...</span>
-                    </div>
-                ) : (
-                    <>
-                        {/* Scrollable Table Body with Fixed Header */}
-                        <div className="table-container flex-1 overflow-auto" style={{ maxHeight: `calc(${gridHeight} - ${headerHeight}px - 60px)` }}>
-                            <table className="table-auto w-full border">
-                                <CNCGridHeader
-                                    colDef={visibleColumns.filter(col => col.visible)}  // Apply visibility to headers
-                                    setFilteredData={setFilteredData}
-                                    rowData={rowData}
-                                    clearFilters={clearFilters}  // Pass clearFilters prop to reset filters in header
-                                />
-                                <tbody>
-                                {filteredData.length > 0 ? (
-                                    filteredData
-                                        .slice((internalPage - 1) * internalPageSize, internalPage * internalPageSize)
-                                        .map((row, index) => (
-                                            <RowComponent
-                                                key={index}
-                                                row={row}
-                                                rowHeight={rowHeight}
-                                                visibleColumns={visibleColumns.filter(col => col.visible)} // Only show visible columns
-                                                onRowClick={onRowClick}
-                                                onRowDoubleClick={onRowDoubleClick}
-                                                onRowRightClick={onRowRightClick}
-                                                onCellClick={onCellClick}
-                                                onCellDoubleClick={onCellDoubleClick}
-                                                onCellRightClick={onCellRightClick}
-                                            />
-                                        ))
-                                ) : (
-                                    <tr>
-                                        <td colSpan={visibleColumns.length} className="text-center py-4">
-                                            {noDataMessage}
-                                        </td>
-                                    </tr>
-                                )}
-                                </tbody>
-                            </table>
-                        </div>
-                    </>
-                )}
+                <div className="table-container flex-1 overflow-auto" style={{ maxHeight: `calc(${gridHeight} - ${headerHeight}px - 60px)` }}>
+                    <table className="table-auto w-full border">
+                        <CNCGridHeader
+                            colDef={visibleColumns.filter(col => col.visible)}  // Apply visibility to headers
+                            setFilteredData={setFilteredData}
+                            rowData={rowData}
+                            clearFilters={clearFilters}  // Pass clearFilters prop to reset filters in header
+                        />
+                        <tbody>
+                        {filteredData.length > 0 ? (
+                            filteredData
+                                .slice((internalPage - 1) * internalPageSize, internalPage * internalPageSize)
+                                .map((row, index) => (
+                                    <RowComponent
+                                        key={index}
+                                        row={row}
+                                        rowHeight={rowHeight}
+                                        visibleColumns={visibleColumns.filter(col => col.visible)} // Only show visible columns
+                                        onRowClick={onRowClick}
+                                        onRowDoubleClick={onRowDoubleClick}
+                                        onRowRightClick={onRowRightClick}
+                                        onCellClick={onCellClick}
+                                        onCellDoubleClick={onCellDoubleClick}
+                                        onCellRightClick={onCellRightClick}
+                                        loading={loading}
+                                    />
+                                ))
+                        ) : (
+                            <tr>
+                                <td colSpan={visibleColumns.length} className="text-center py-4">
+                                    {noDataMessage}
+                                </td>
+                            </tr>
+                        )}
+                        </tbody>
+                    </table>
+                </div>
 
                 {/* Pagination Component */}
                 {pagination && (
