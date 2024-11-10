@@ -28,7 +28,7 @@
     "organizationUrl": "https://codencode.ae"
   },
   "license": "ISC",
-  "description": "A simple grid component",
+  "description": "CNC Grid is a customizable and easy-to-use data grid component for React/Next applications. It provides flexible filtering, sorting, and pagination features, along with the ability to export data to various formats (CSV, Excel, and PDF). Built to be lightweight and highly customizable, CNC Grid fits seamlessly into your projects.",
   "dependencies": {
     "@iconify/react": "^5.0.2",
     "@nextui-org/button": "^2.0.38",
