@@ -1,4 +1,22 @@
-/* src/styles.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.grid-container {
+  @apply flex flex-col border border-gray-300 rounded-lg shadow-md py-2;
+}
+
+.table-container {
+  overflow-y: auto;
+}
+
+.table-container table thead {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 1;
+}
+
+.pagination-container {
+  @apply px-3 py-2 grid grid-cols-1 md:grid-cols-3;
+}

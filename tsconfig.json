@@ -16,7 +16,9 @@
     "outDir": "./dist",       // Ensure output goes to dist
     "jsx": "react-jsx",
     "declaration": true,
-    "declarationDir": "./dist/types"
+    "declarationDir": "./dist/types",
+    "typeRoots": ["./node_modules/@types", "./src/types"],
+    "baseUrl": "."
   },
   "include": ["src/**/*"]
 }
