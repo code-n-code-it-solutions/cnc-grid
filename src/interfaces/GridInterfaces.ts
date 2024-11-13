@@ -5,9 +5,11 @@ import React from "react";
 
 export interface ColumnDef {
     headerName: string;
-    field: string;
+    field?: string;
     sortable?: boolean;
     renderCell?: (row: any) => React.ReactNode;
+    minWidth?: number; //default according to content
+    maxWidth?: number; //default according to content
     width?: number; //default according to content
     resizable?: boolean; //default true
     filterable?: boolean; //default true
@@ -51,4 +53,7 @@ export interface GridProps {
     pageSizes?: number[];
     loading?: boolean;
     noDataMessage?: string;
+    rowModelType?: 'clientSide' | 'serverSide';
+    fetchData?: (params:any) => Promise<any[]>;
+    className?: string
 }

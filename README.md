@@ -1,6 +1,8 @@
 # CNC Grid
 
-CNC Grid is a customizable and easy-to-use data grid component for React applications. It provides flexible filtering, sorting, and pagination features, along with the ability to export data to various formats (CSV, Excel, and PDF). Built to be lightweight and highly customizable, CNC Grid fits seamlessly into your projects.
+> **🚧 This package is under active development. Rapid updates are being added daily, and contributions from developers are highly encouraged! 🚧**
+
+CNC Grid is a customizable and easy-to-use data grid component for React and Next.js applications. It provides flexible filtering, sorting, and pagination features, along with the ability to export data to various formats (CSV, Excel, and PDF). Built to be lightweight and highly customizable, CNC Grid fits seamlessly into your projects.
 
 ![npm](https://img.shields.io/npm/v/cnc-grid)
 ![license](https://img.shields.io/npm/l/cnc-grid)

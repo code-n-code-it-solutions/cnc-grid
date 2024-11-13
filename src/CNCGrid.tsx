@@ -34,20 +34,26 @@ const GridContent: React.FC<GridProps> = ({
                                               onColumnVisibilityChange,
                                               onColumnOrderChange,
                                               onGridReady,
-                                              export: { csv = false, excel = false, pdf = false } = { csv: false, excel: false, pdf: false },
+                                              export: { csv = false, excel = false, pdf = false } = {
+                                                  csv: false,
+                                                  excel: false,
+                                                  pdf: false
+                                              },
                                               pagination = false,
                                               pageSize = 10,
                                               pageSizes = [10, 20, 50],
                                               currentPage = 1,
                                               onPageChange,
                                               loading = false,
-                                              noDataMessage = "No data available"
+                                              noDataMessage = "No data available",
+                                              rowModelType = 'clientSide',
+                                              fetchData,
+                                              className
                                           }) => {
     const { filterText, setFilterText } = useGridContext();
     const [filteredData, setFilteredData] = useState(rowData);
     const [clearFilters, setClearFilters] = useState(false);
 
-    // Set visible to true by default if not provided
     const [visibleColumns, setVisibleColumns] = useState<ColumnDef[]>(
         colDef.map((col) => ({ ...col, visible: col.visible !== false }))
     );
@@ -59,20 +65,25 @@ const GridContent: React.FC<GridProps> = ({
         setFilteredData(filterData(rowData, filterText));
     }, [filterText, rowData]);
 
-    const handleColumnVisibilityChange = (field: string) => {
+    const handleColumnVisibilityChange = (index: number) => {
         setVisibleColumns((prevColumns) =>
-            prevColumns.map((col) =>
-                col.field === field ? { ...col, visible: !col.visible } : col
+            prevColumns.map((col, colIndex) =>
+                colIndex === index ? { ...col, visible: !col.visible } : col
             )
         );
-        onColumnVisibilityChange && onColumnVisibilityChange(field, !colDef.find(col => col.field === field)?.visible);
+        if (onColumnVisibilityChange) {
+            const updatedCol = colDef[index];
+            onColumnVisibilityChange(updatedCol.headerName, !updatedCol.visible);
+        }
     };
 
     const handleExport = (type: 'csv' | 'excel' | 'pdf') => {
         const exportData = [
             visibleColumns.filter((col) => col.visible).map((col) => col.headerName),
             ...filteredData.map((row) =>
-                visibleColumns.filter((col) => col.visible).map((col) => row[col.field] || "")
+                visibleColumns.filter((col) => col.visible).map((col, colIndex) =>
+                    col.renderCell ? col.renderCell(row) : row[colDef[colIndex].headerName] || ""
+                )
             ),
         ];
 
@@ -86,12 +97,11 @@ const GridContent: React.FC<GridProps> = ({
     };
 
     const handleClearFilters = () => {
-        setFilteredData(rowData); // Reset the filtered data to the original row data
-        setClearFilters(true); // Trigger clear filters in CNCGridHeader
-        setFilterText(''); // Clear the global filter text
-        setInternalPage(1); // Reset pagination to the first page
+        setFilteredData(rowData);
+        setClearFilters(true);
+        setFilterText('');
+        setInternalPage(1);
 
-        // Reset the filters after a short delay to avoid immediate re-render
         setTimeout(() => setClearFilters(false), 100);
     };
 
@@ -105,17 +115,18 @@ const GridContent: React.FC<GridProps> = ({
 
     const handlePageSizeChange = (size: number) => {
         setInternalPageSize(size);
-        setInternalPage(1); // Reset to first page when page size changes
+        setInternalPage(1);
     };
 
     return (
         <NextUIProvider>
-            <div className="grid-container" style={{ width: gridWidth, height: gridHeight }}>
+            <div className={`grid-container ${className}`} style={{ width: gridWidth, height: gridHeight }}>
                 <div className="flex justify-between items-center flex-col md:flex-row px-3 py-1 md:gap-2">
                     {/* Export Buttons */}
                     <div className="flex flex-row gap-1">
                         {csv && <Button onClick={() => handleExport('csv')} className="rounded" size="sm">CSV</Button>}
-                        {excel && <Button onClick={() => handleExport('excel')} className="rounded" size="sm">Excel</Button>}
+                        {excel &&
+                            <Button onClick={() => handleExport('excel')} className="rounded" size="sm">Excel</Button>}
                         {pdf && <Button onClick={() => handleExport('pdf')} className="rounded" size="sm">PDF</Button>}
                     </div>
 
@@ -124,7 +135,7 @@ const GridContent: React.FC<GridProps> = ({
                         <FilterComponent onFilterChange={(text) => {
                             setFilterText(text);
                             onFilterChange && onFilterChange(text);
-                        }} />
+                        }}/>
 
                         <Button onClick={handleClearFilters} className="rounded" size="sm">Clear Filters</Button>
 
@@ -134,11 +145,11 @@ const GridContent: React.FC<GridProps> = ({
                                 <Button variant="bordered">Visibility</Button>
                             </DropdownTrigger>
                             <DropdownMenu aria-label="Column Visibility">
-                                {visibleColumns.map((col) => (
-                                    <DropdownItem key={col.field}>
+                                {visibleColumns.map((col, index) => (
+                                    <DropdownItem key={index}>
                                         <Checkbox
                                             isSelected={col.visible}
-                                            onChange={() => handleColumnVisibilityChange(col.field)}
+                                            onChange={() => handleColumnVisibilityChange(index)}
                                         >
                                             {col.headerName}
                                         </Checkbox>
@@ -149,15 +160,15 @@ const GridContent: React.FC<GridProps> = ({
                     </div>
                 </div>
 
-                <div className="table-container flex-1 overflow-auto" style={{ maxHeight: `calc(${gridHeight} - ${headerHeight}px - 60px)` }}>
-                    <table className="table-auto w-full border">
+                <div className="grid flex-1 overflow-auto"
+                     style={{ maxHeight: `calc(${gridHeight} - ${headerHeight}px - 60px)` }}>
+                    <div className="flex flex-col">
                         <CNCGridHeader
-                            colDef={visibleColumns.filter(col => col.visible)}  // Apply visibility to headers
+                            colDef={visibleColumns.filter(col => col.visible)}
                             setFilteredData={setFilteredData}
                             rowData={rowData}
-                            clearFilters={clearFilters}  // Pass clearFilters prop to reset filters in header
+                            clearFilters={clearFilters}
                         />
-                        <tbody>
                         {filteredData.length > 0 ? (
                             filteredData
                                 .slice((internalPage - 1) * internalPageSize, internalPage * internalPageSize)
@@ -166,7 +177,7 @@ const GridContent: React.FC<GridProps> = ({
                                         key={index}
                                         row={row}
                                         rowHeight={rowHeight}
-                                        visibleColumns={visibleColumns.filter(col => col.visible)} // Only show visible columns
+                                        visibleColumns={visibleColumns.filter(col => col.visible)}
                                         onRowClick={onRowClick}
                                         onRowDoubleClick={onRowDoubleClick}
                                         onRowRightClick={onRowRightClick}
@@ -177,14 +188,11 @@ const GridContent: React.FC<GridProps> = ({
                                     />
                                 ))
                         ) : (
-                            <tr>
-                                <td colSpan={visibleColumns.length} className="text-center py-4">
-                                    {noDataMessage}
-                                </td>
-                            </tr>
+                            <div className="text-center py-4">
+                                {noDataMessage}
+                            </div>
                         )}
-                        </tbody>
-                    </table>
+                    </div>
                 </div>
 
                 {/* Pagination Component */}

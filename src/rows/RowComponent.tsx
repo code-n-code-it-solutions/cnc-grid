@@ -14,7 +14,8 @@ interface RowProps {
     onCellClick?: (cell: any) => void;
     onCellDoubleClick?: (cell: any) => void;
     onCellRightClick?: (cell: any) => void;
-    loading?: boolean
+    loading?: boolean;
+    cellWrap?: boolean;
 }
 
 const RowComponent: React.FC<RowProps> = ({
@@ -27,40 +28,53 @@ const RowComponent: React.FC<RowProps> = ({
                                               onCellClick,
                                               onCellDoubleClick,
                                               onCellRightClick,
-                                              loading = false
+                                              loading = false,
+                                              cellWrap = false
                                           }) => {
     return (
-        <tr
-            style={{height: rowHeight}}
+        <div
             onClick={() => onRowClick && onRowClick(row)}
             onDoubleClick={() => onRowDoubleClick && onRowDoubleClick(row)}
             onContextMenu={(e) => {
                 e.preventDefault();
                 onRowRightClick && onRowRightClick(row);
             }}
+            className="flex border-b"
+            style={{height: rowHeight}}
         >
-            {loading
-                ? <td
-                    colSpan={visibleColumns.length}
-                    className="border px-4 py-2"
-                >
-                    Loading...
-                </td>
-                : visibleColumns.map((col, index) => (
-                    <td
-                        key={index}
-                        className="border px-4 py-2"
-                        onClick={() => onCellClick && onCellClick(row[col.field])}
-                        onDoubleClick={() => onCellDoubleClick && onCellDoubleClick(row[col.field])}
-                        onContextMenu={(e) => {
-                            e.preventDefault();
-                            onCellRightClick && onCellRightClick(row[col.field]);
-                        }}
-                    >
-                        {col.renderCell ? col.renderCell(row) : row[col.field]}
-                    </td>
-                ))}
-        </tr>
+            {loading ? (
+                <div className="border-b px-4 py-2">Loading...</div>
+            ) : (
+                visibleColumns.map((col, index) => {
+                    // Ensure width, minWidth, and maxWidth are valid numbers with fallback values
+                    const cellWidth = typeof col.width === 'number' && !isNaN(col.width) ? col.width : 150;
+                    const minWidth = typeof col.minWidth === 'number' && !isNaN(col.minWidth) ? col.minWidth : 50;
+                    const maxWidth = typeof col.maxWidth === 'number' && !isNaN(col.maxWidth) ? col.maxWidth : 500;
+
+                    const computedWidth = Math.max(minWidth, Math.min(cellWidth, maxWidth));
+
+                    return (
+                        <div
+                            key={index}
+                            className={`px-2 py-2 ${!cellWrap ? 'overflow-hidden text-ellipsis whitespace-nowrap' : ''}`}
+                            style={{
+                                width: computedWidth,
+                                minWidth: minWidth,
+                                maxWidth: maxWidth
+                            }}
+                            onClick={() => onCellClick && onCellClick(col.renderCell ? col.renderCell(row) : row[index])}
+                            onDoubleClick={() => onCellDoubleClick && onCellDoubleClick(col.renderCell ? col.renderCell(row) : row[index])}
+                            onContextMenu={(e) => {
+                                e.preventDefault();
+                                onCellRightClick && onCellRightClick(col.renderCell ? col.renderCell(row) : row[index]);
+                            }}
+                        >
+                            {col.renderCell ? col.renderCell(row) : col.field ? row[col.field] : ''}
+                        </div>
+                    );
+                })
+            )}
+        </div>
     );
 };
 

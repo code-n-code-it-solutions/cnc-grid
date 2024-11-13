@@ -3,20 +3,34 @@
 @tailwind utilities;
 
 .grid-container {
-  @apply flex flex-col border border-gray-300 rounded-lg shadow-md py-2;
+    @apply flex flex-col border border-gray-300 rounded-lg shadow-md py-2;
 }
 
 .table-container {
-  overflow-y: auto;
+    overflow-y: auto;
 }
 
 .table-container table thead {
-  position: sticky;
-  top: 0;
-  background-color: white;
-  z-index: 1;
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 1;
 }
 
 .pagination-container {
-  @apply px-3 py-2 grid grid-cols-1 md:grid-cols-3;
+    @apply px-3 py-2 grid grid-cols-1 md:grid-cols-3;
+}
+
+
+.grid-header {
+    @apply bg-[#FAFAFB]
+}
+
+.absolute-menu {
+    z-index: 9999; /* Higher z-index to ensure visibility */
+    overflow: visible; /* Ensure visibility within grid */
+}
+
+.grid-container {
+    overflow: visible; /* Allow overflow to show the menu */
 }
