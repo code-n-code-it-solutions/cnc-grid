@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .grid-container {
-    @apply flex flex-col border border-gray-300 rounded-lg shadow-md py-2;
+    @apply flex flex-col bg-white border border-gray-300 rounded-lg shadow-md py-2;
 }
 
 .table-container {
@@ -18,9 +18,9 @@
 }
 
 .pagination-container {
-    @apply px-3 py-2 grid grid-cols-1 md:grid-cols-3;
+    /*@apply px-3 py-2 grid grid-cols-1 md:grid-cols-3 text-center gap-1;*/
+    @apply px-3 mt-auto py-3 flex flex-col md:flex-row md:justify-end md:items-center border-t gap-3;
 }
-
 
 .grid-header {
     @apply bg-[#FAFAFB]
@@ -33,4 +33,26 @@
 
 .grid-container {
     overflow: visible; /* Allow overflow to show the menu */
+}
+
+.bg-default-100 {
+    background-color: #ffffff !important;
+}
+
+.rounded-large {
+    @apply rounded p-0
+}
+
+ul[data-slot="listbox"] li {
+    @apply rounded-none
+}
+
+.pagination-container {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    user-select: none; /* Disable text selection */
+}
+.pagination-container .cursor-pointer {
+    user-select: none;
 }
