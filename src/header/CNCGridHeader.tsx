@@ -138,9 +138,14 @@ const CNCGridHeader: React.FC<CNCGridHeaderProps> = ({
         e.stopPropagation();
         const iconElement = iconRefs.current[index];
         if (iconElement) {
-            const offsetTop = iconElement.offsetTop;
-            const offsetLeft = iconElement.offsetLeft;
-            setShowMenu({index, position: {top: offsetTop + 25, left: offsetLeft - 192}});
+            const rect = iconElement.getBoundingClientRect();
+            setShowMenu({
+                index,
+                position: {
+                    top: 0,
+                    left: rect.left + window.scrollX - 192  // Adjust left position as needed
+                }
+            });
         }
     };
 
@@ -185,7 +190,7 @@ const CNCGridHeader: React.FC<CNCGridHeaderProps> = ({
     };
 
     return (
-        <div className="flex flex-row sticky grid-header border-b border-t h-[50px] items-center">
+        <div className="grid-header">
             {colDef.map((col, index) => (
                 <div
                     key={`header-${index}`}
@@ -239,12 +244,10 @@ const CNCGridHeader: React.FC<CNCGridHeaderProps> = ({
                             }}
                         >
                             <div className="font-semibold text-sm mb-2">Filter by {col.headerName}</div>
-                            <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                                 onClick={() => handleSort(index)}>
+                            <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => handleSort(index)}>
                                 Sort A to Z
                             </div>
-                            <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                                 onClick={() => handleSort(index)}>
+                            <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => handleSort(index)}>
                                 Sort Z to A
                             </div>
                             <Input
@@ -265,7 +268,7 @@ const CNCGridHeader: React.FC<CNCGridHeaderProps> = ({
                                 </Checkbox>
                             </label>
 
-                            <div className="flex flex-col gap-1 overflow-y-auto" style={{maxHeight: '150px'}}>
+                            <div className="flex flex-col gap-1 overflow-y-auto" style={{ maxHeight: '150px' }}>
                                 {filterOptions[index]?.filter((option) =>
                                     option.toLowerCase().includes(searchText.toLowerCase())
                                 ).map((option) => (
@@ -281,8 +284,7 @@ const CNCGridHeader: React.FC<CNCGridHeaderProps> = ({
 
                             <div className="flex justify-end mt-2">
                                 <button className="px-2 py-1 text-blue-600" onClick={handleHideMenu}>OK</button>
-                                <button className="px-2 py-1 text-gray-600 ml-2" onClick={handleHideMenu}>Cancel
-                                </button>
+                                <button className="px-2 py-1 text-gray-600 ml-2" onClick={handleHideMenu}>Cancel</button>
                             </div>
                         </div>
                     )}

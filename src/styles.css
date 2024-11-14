@@ -2,23 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
+/*.grid-container {*/
+/*    @apply flex flex-col bg-white border border-gray-300 rounded-lg shadow-md py-2;*/
+/*}*/
+
 .grid-container {
     @apply flex flex-col bg-white border border-gray-300 rounded-lg shadow-md py-2;
 }
 
-.table-container {
-    overflow-y: auto;
+.grid-body {
+    @apply overflow-hidden
 }
 
-.table-container table thead {
-    position: sticky;
-    top: 0;
-    background-color: white;
-    z-index: 1;
+.grid-header {
+    @apply flex flex-row sticky top-0 z-10 border-b bg-[#FAFAFB] border-t h-[50px] items-center
+}
+
+.grid-row {
+    @apply flex border-b;
+}
+
+.grid-row:hover {
+    @apply bg-[#f9fafb]
+}
+
+.grid-cell {
+    @apply px-2 py-2;
+}
+
+.grid-cell.not-wrapped {
+    @apply overflow-hidden text-ellipsis whitespace-nowrap;
+}
+
+.grid-cell.focused {
+    @apply border-[1px] border-[#2196f3];
 }
 
 .pagination-container {
-    /*@apply px-3 py-2 grid grid-cols-1 md:grid-cols-3 text-center gap-1;*/
     @apply px-3 mt-auto py-3 flex flex-col md:flex-row md:justify-end md:items-center border-t gap-3;
 }
 
@@ -29,10 +49,6 @@
 .absolute-menu {
     z-index: 9999; /* Higher z-index to ensure visibility */
     overflow: visible; /* Ensure visibility within grid */
-}
-
-.grid-container {
-    overflow: visible; /* Allow overflow to show the menu */
 }
 
 .bg-default-100 {
@@ -53,6 +69,7 @@ ul[data-slot="listbox"] li {
     align-items: center;
     user-select: none; /* Disable text selection */
 }
+
 .pagination-container .cursor-pointer {
     user-select: none;
 }

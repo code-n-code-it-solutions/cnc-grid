@@ -165,33 +165,35 @@ const GridContent: React.FC<GridProps> = ({
                             rowData={rowData}
                             clearFilters={clearFilters}
                         />
-                        {filteredData.length > 0 ? (
-                            filteredData
-                                .slice((internalPage - 1) * internalPageSize, internalPage * internalPageSize)
-                                .map((row, index) => (
-                                    <RowComponent
-                                        key={index}
-                                        row={row}
-                                        rowHeight={rowHeight}
-                                        visibleColumns={visibleColumns.filter(col => col.visible)}
-                                        onRowClick={onRowClick}
-                                        onRowDoubleClick={onRowDoubleClick}
-                                        onRowRightClick={onRowRightClick}
-                                        onCellClick={onCellClick}
-                                        onCellDoubleClick={onCellDoubleClick}
-                                        onCellRightClick={onCellRightClick}
-                                        loading={loading}
-                                        rowIndex={index}
-                                        rowData={row}
-                                        focusedCell={focusedCell}
-                                        setFocusedCell={setFocusedCell}
-                                    />
-                                ))
-                        ) : (
-                            <div className="md:text-center py-4 px-5">
-                                {noDataMessage}
-                            </div>
-                        )}
+                        <div className="grid-body">
+                            {filteredData.length > 0 ? (
+                                filteredData
+                                    .slice((internalPage - 1) * internalPageSize, internalPage * internalPageSize)
+                                    .map((row, index) => (
+                                        <RowComponent
+                                            key={index}
+                                            row={row}
+                                            rowHeight={rowHeight}
+                                            visibleColumns={visibleColumns.filter(col => col.visible)}
+                                            onRowClick={onRowClick}
+                                            onRowDoubleClick={onRowDoubleClick}
+                                            onRowRightClick={onRowRightClick}
+                                            onCellClick={onCellClick}
+                                            onCellDoubleClick={onCellDoubleClick}
+                                            onCellRightClick={onCellRightClick}
+                                            loading={loading}
+                                            rowIndex={index}
+                                            rowData={row}
+                                            focusedCell={focusedCell}
+                                            setFocusedCell={setFocusedCell}
+                                        />
+                                    ))
+                            ) : (
+                                <div className="md:text-center py-4 px-5">
+                                    {noDataMessage}
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
 
